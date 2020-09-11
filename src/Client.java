@@ -24,9 +24,13 @@ public class Client {
         return this.clientName;
     }
     private Scanner sc;
+    private boolean imWaitPort;
+    private int filePort;
+    private SendFile sendFile;
 
 
     public Client() {
+        imWaitPort=false;
         try {
             // подключаемся к серверу
             clientSocket = new Socket(SERVER_HOST, SERVER_PORT);
@@ -46,16 +50,17 @@ public class Client {
                     while (true) {
                         if(sc.hasNext()){
                             if(sc.next().equals("g")){
-                                //sendFile();
+                                sendFile();
                             }
                         }
-                        // если есть входящее сообщение
-                        //if (inMessage.hasNext()) {
-                        //    // считываем его
-                        //    String inMes = inMessage.nextLine();
-                        //    String clientsInChat = "Клиентов в чате = ";
+                         //если есть входящее сообщение
+                        if (inMessage.hasNext()) {
+                            // считываем его
+                            String inMes = inMessage.nextLine();
                                 // выводим сообщение
-                        //}
+                            System.out.println(inMes);
+                            massage(inMes);
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -83,6 +88,35 @@ public class Client {
 
         }
     }
+    private void sendFile(){
+        sendMsg("System sendFile givePort");
+        imWaitPort=true;
+    }
+
+    private void massage(String msg){
+        String [] arr = msg.split(" ");
+        switch (arr[0]){
+            case "System":
+                switch (arr[1]){
+                    case "sendFile":
+                        switch (arr[2]){
+                            case "givePortToYou":
+                                if(imWaitPort){
+                                    filePort=Integer.parseInt(arr[3]);
+                                    connectToFileServer();
+                                }
+                        }
+                        break;
+                }
+                    break;
+
+        }
+    }
+
+    private void connectToFileServer() {
+        sendFile = new SendFile(filePort);
+    }
+
 
     // отправка сообщения
     public void sendMsg(String msg) {
