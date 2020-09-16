@@ -28,11 +28,13 @@ public class Server extends Thread{
     }
 
     public void run(){
+        new FileServer();
         String a = "";
         try{
             final DatagramSocket socket = new DatagramSocket();
             socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
             a = socket.getLocalAddress().getHostAddress();
+            System.out.println(a);
         } catch (SocketException | UnknownHostException e) {
             e.printStackTrace();
         }

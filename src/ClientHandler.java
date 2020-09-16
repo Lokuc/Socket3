@@ -12,7 +12,7 @@ public class ClientHandler implements Runnable {
     private PrintWriter outMessage;
     // входящее собщение
     private Scanner inMessage;
-    private static final String HOST = "localhost";
+    private static final String HOST = "192.168.0.103";
     private static final int PORT = 54321;
     // клиентский сокет
     private Socket clientSocket = null;
@@ -47,6 +47,8 @@ public class ClientHandler implements Runnable {
                 server.sendMessageToAllClients("Клиентов в чате = " + clients_count);
                 break;
             }
+            SendFile sf  = new SendFile(54322);
+            sendMsg("System sendFile givePortToYou 54322");
 
             while (true) {
                 // Если от клиента пришло сообщение
@@ -72,8 +74,12 @@ public class ClientHandler implements Runnable {
         }
     }
     // отправляем сообщение
+    public void sendMsg(int msg){
+        sendMsg(msg+"");
+    }
     public void sendMsg(String msg) {
         try {
+            System.out.println(msg);
             outMessage.println(msg);
             outMessage.flush();
         } catch (Exception ex) {

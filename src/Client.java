@@ -30,7 +30,7 @@ public class Client {
 
 
     public Client() {
-        imWaitPort=false;
+        imWaitPort=true;
         try {
             // подключаемся к серверу
             clientSocket = new Socket(SERVER_HOST, SERVER_PORT);
@@ -48,18 +48,15 @@ public class Client {
                 try {
                     // бесконечный цикл
                     while (true) {
-                        if(sc.hasNext()){
-                            if(sc.next().equals("g")){
-                                sendFile();
-                            }
-                        }
-                         //если есть входящее сообщение
-                        if (inMessage.hasNext()) {
-                            // считываем его
-                            String inMes = inMessage.nextLine();
+                        if(inMessage.hasNext()) {
+                            //если есть входящее сообщение
+                            if (inMessage.hasNext()) {
+                                // считываем его
+                                String inMes = inMessage.nextLine();
                                 // выводим сообщение
-                            System.out.println(inMes);
-                            massage(inMes);
+                                System.out.println(inMes);
+                                massage(inMes);
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -102,6 +99,7 @@ public class Client {
                         switch (arr[2]){
                             case "givePortToYou":
                                 if(imWaitPort){
+                                    System.out.println(arr[3]);
                                     filePort=Integer.parseInt(arr[3]);
                                     connectToFileServer();
                                 }
@@ -114,7 +112,7 @@ public class Client {
     }
 
     private void connectToFileServer() {
-        sendFile = new SendFile(filePort);
+        GetFile gf = new GetFile(filePort);
     }
 
 
