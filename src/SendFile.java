@@ -1,6 +1,8 @@
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
+import java.nio.charset.Charset;
 
 public class SendFile extends Thread  {
 
@@ -21,7 +23,8 @@ public class SendFile extends Thread  {
             int tmp;
             socket = new Socket("192.168.0.103",port);
             outMes = new PrintWriter(socket.getOutputStream());
-            InputStreamReader isr = new InputStreamReader(new FileInputStream("res/out/test.txt"));
+            InputStreamReader isr = new InputStreamReader(new FileInputStream("res/out/re.zip"),Charset.forName("UTF-8"));
+            System.out.println(isr.getEncoding());
             sleep(3000);
             do{
                 tmp=isr.read();
@@ -29,7 +32,6 @@ public class SendFile extends Thread  {
                 tmp = (tmp == -1) ? -2 : tmp;
                 outMes.println(tmp);
                 outMes.flush();
-                sleep(100);
             }while(tmp!=-2);
 
         }catch (Exception e){

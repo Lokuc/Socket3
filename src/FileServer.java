@@ -50,23 +50,11 @@ public class FileServer extends Thread{
         catch (IOException ex) {
             ex.printStackTrace();
         }
-        finally {
-            try {
-                // закрываем подключение
-                System.out.println("Сервер остановлен");
-                serverSocket.close();
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
         while (true){
             if(creat){
                 if(inMessage.hasNext()){
                     tmp=inMessage.next();
-
-                    System.out.println(tmp+" hh");
-                    outMessage.print(tmp);
+                    outMessage.println(tmp);
                     outMessage.flush();
                 }
             }

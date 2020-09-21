@@ -1,6 +1,11 @@
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CoderResult;
 import java.util.Scanner;
 
 public class GetFile extends Thread  {
@@ -11,7 +16,7 @@ public class GetFile extends Thread  {
     OutputStreamWriter osw;
 
     public GetFile(int port){
-        this.port=port;
+        this.port=54322;
         this.start();
     }
 
@@ -22,7 +27,7 @@ public class GetFile extends Thread  {
         int tmp;
         try{
             socket = new Socket("192.168.0.103",port);
-            osw = new OutputStreamWriter(new FileOutputStream("res/in/testy.txt"));
+            osw = new OutputStreamWriter(new FileOutputStream("res/in/r.zip"), Charset.forName("UTF-8").newEncoder());
             inMessage = new Scanner(socket.getInputStream());
 
 
@@ -31,19 +36,17 @@ public class GetFile extends Thread  {
         }
 
             while (true) {
-                System.out.println("waits");
-                System.out.println(inMessage.nextLine());
-                tmp=inMessage.nextInt();
-                System.out.println(tmp+"  htrr");
-                try {
-                    osw.write(tmp);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(tmp);
-                System.out.println("oll");
-                if(tmp==-2){
-                    break;
+                if(inMessage.hasNext()) {
+                    tmp = inMessage.nextInt();
+                    if (tmp == -2) {
+                        break;
+                    }
+                    try {
+                        osw.write(tmp);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(tmp);
                 }
 
             }
@@ -53,6 +56,7 @@ public class GetFile extends Thread  {
             e.printStackTrace();
         }
         try {
+            System.out.println("end");
             osw.close();
         } catch (IOException e) {
             e.printStackTrace();
