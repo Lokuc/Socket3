@@ -1,11 +1,6 @@
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
-import java.nio.charset.CoderResult;
 import java.util.Scanner;
 
 public class GetFile extends Thread  {
@@ -13,7 +8,7 @@ public class GetFile extends Thread  {
     private Socket socket;
     private int port;
     private Scanner inMessage;
-    OutputStreamWriter osw;
+    BufferedOutputStream bos;
 
     public GetFile(int port){
         this.port=54322;
@@ -27,7 +22,7 @@ public class GetFile extends Thread  {
         int tmp;
         try{
             socket = new Socket("192.168.0.103",port);
-            osw = new OutputStreamWriter(new FileOutputStream("res/in/r.zip"), Charset.forName("UTF-8").newEncoder());
+            bos = new BufferedOutputStream(new FileOutputStream("res/in/r.jpg"));
             inMessage = new Scanner(socket.getInputStream());
 
 
@@ -42,7 +37,7 @@ public class GetFile extends Thread  {
                         break;
                     }
                     try {
-                        osw.write(tmp);
+                        bos.write(tmp);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -51,13 +46,8 @@ public class GetFile extends Thread  {
 
             }
         try {
-            osw.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            System.out.println("end");
-            osw.close();
+            bos.flush();
+            bos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
